@@ -34,9 +34,14 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void linkLast(Node node) {
+        Node lastNode = head;
+        while (lastNode.getNext() != tail) {
+            lastNode = lastNode.getNext();
+        }
+        node.setPrev(lastNode);
         node.setNext(tail);
-        node.setPrev(tail.getPrev());
-        tail.getPrev().setNext(node);
+
+        lastNode.setNext(node);
         tail.setPrev(node);
     }
 
@@ -79,5 +84,13 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public List<Task> getHistory() {
         return getTasks();
+    }
+
+    public void historyWipe() {
+        history.clear();
+
+        head.setNext(tail);
+        tail.setPrev(head);
+
     }
 }

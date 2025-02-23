@@ -16,6 +16,7 @@ public class HistoryManagerTest extends BasePreferences {
     public void nodeNotNullTest() {
         HistoryManager historyManager = Managers.getHistoryManager();
         assertNotNull(historyManager);
+
     }
 
     @Test
@@ -37,8 +38,8 @@ public class HistoryManagerTest extends BasePreferences {
         Managers.historyManager.add(task2);
 
         List<Task> history = Managers.historyManager.getHistory();
-        System.out.println(Managers.historyManager.getHistory());
         assertNotNull(history);
+
     }
 
     @Test
@@ -60,5 +61,30 @@ public class HistoryManagerTest extends BasePreferences {
 
         List<Task> history = Managers.historyManager.getHistory();
         assertEquals(task3, history.get(3));
+
+        Managers.historyManager.historyWipe();
+    }
+
+    @Test
+    @Description("Тест на проверку размера истории при повторных запросах")
+    public void historyManagerCopyRestrictedTest() {
+        Task task = new Task("Тайтл1", "desc", Status.NEW);
+        Task task2 = new Task("Тайтл2", "desc", Status.NEW);
+        Task task3 = new Task("Тайтл3", "desc", Status.NEW);
+        Task task4 = new Task("Тайтл4", "desc", Status.NEW);
+        manager.addTask(task);
+        manager.addTask(task2);
+        manager.addTask(task3);
+        manager.addTask(task4);
+
+        manager.getTaskById(1);
+        manager.getTaskById(2);
+        manager.getTaskById(1);
+        manager.getTaskById(1);
+
+        List<Task> history = Managers.historyManager.getHistory();
+        assertEquals(2, history.size());
+
+        Managers.historyManager.historyWipe();
     }
 }
