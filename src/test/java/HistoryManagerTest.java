@@ -16,7 +16,6 @@ public class HistoryManagerTest extends BasePreferences {
     public void nodeNotNullTest() {
         HistoryManager historyManager = Managers.getHistoryManager();
         assertNotNull(historyManager);
-
     }
 
     @Test
@@ -39,7 +38,6 @@ public class HistoryManagerTest extends BasePreferences {
 
         List<Task> history = Managers.historyManager.getHistory();
         assertNotNull(history);
-
     }
 
     @Test
@@ -61,7 +59,6 @@ public class HistoryManagerTest extends BasePreferences {
 
         List<Task> history = Managers.historyManager.getHistory();
         assertEquals(task3, history.get(3));
-
         Managers.historyManager.historyWipe();
     }
 
@@ -84,7 +81,6 @@ public class HistoryManagerTest extends BasePreferences {
 
         List<Task> history = Managers.historyManager.getHistory();
         assertEquals(2, history.size());
-
         Managers.historyManager.historyWipe();
     }
 }

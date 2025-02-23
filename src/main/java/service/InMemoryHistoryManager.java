@@ -34,15 +34,13 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void linkLast(Node node) {
-        Node lastNode = head;
-        while (lastNode.getNext() != tail) {
-            lastNode = lastNode.getNext();
-        }
-        node.setPrev(lastNode);
+        node.setPrev(tail.getPrev());
         node.setNext(tail);
-
-        lastNode.setNext(node);
+        tail.getPrev().setNext(node);
         tail.setPrev(node);
+        if (head.getNext() == tail) {
+            head.setNext(node);
+        }
     }
 
     public void remove(int id) {
@@ -88,9 +86,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public void historyWipe() {
         history.clear();
-
         head.setNext(tail);
         tail.setPrev(head);
-
     }
 }
