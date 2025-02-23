@@ -22,9 +22,6 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private int nextId = 1;
 
-    //Убрал из интерфейса.
-    //Я использую этот метод (сеттер) в тестах, чтобы сбросить счетчик nextId до еденицы для того чтобы сделать корректный
-    //ран всех тестов из пакета java.test, неужели это сильно криминально?)
     public void setNextId(int nextId) {
         this.nextId = nextId;
     }

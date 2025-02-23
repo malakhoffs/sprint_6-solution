@@ -13,6 +13,12 @@ import static org.junit.Assert.*;
 
 public class HistoryManagerTest extends BasePreferences {
     @Test
+    public void nodeNotNullTest() {
+        HistoryManager historyManager = Managers.getHistoryManager();
+        assertNotNull(historyManager);
+    }
+
+    @Test
     public void managersClassTest() {
         HistoryManager historyManager = Managers.getHistoryManager();
         assertEquals(manager.getClass(), InMemoryTaskManager.class);
@@ -35,7 +41,6 @@ public class HistoryManagerTest extends BasePreferences {
         assertNotNull(history);
     }
 
-
     @Test
     @Description("Тест на проверку соответствия таска по индексу")
     public void historyManagerIndexTest() {
@@ -56,5 +61,4 @@ public class HistoryManagerTest extends BasePreferences {
         List<Task> history = Managers.historyManager.getHistory();
         assertEquals(task3, history.get(3));
     }
-
 }
