@@ -27,6 +27,7 @@ public class HistoryManagerTest extends BasePreferences {
         manager.addTask(task);
         manager.getTaskById(task.getId());
         assertFalse(manager.getHistory().isEmpty());
+        Managers.historyManager.historyWipe();
     }
 
     @Test
@@ -38,6 +39,7 @@ public class HistoryManagerTest extends BasePreferences {
 
         List<Task> history = Managers.historyManager.getHistory();
         assertNotNull(history);
+        Managers.historyManager.historyWipe();
     }
 
     @Test
@@ -58,7 +60,7 @@ public class HistoryManagerTest extends BasePreferences {
         manager.getTaskById(4);
 
         List<Task> history = Managers.historyManager.getHistory();
-        assertEquals(task3, history.get(3));
+        assertEquals(task3, history.get(2));
         Managers.historyManager.historyWipe();
     }
 

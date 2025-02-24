@@ -34,12 +34,16 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void linkLast(Node node) {
-        node.setPrev(tail.getPrev());
-        node.setNext(tail);
-        tail.getPrev().setNext(node);
-        tail.setPrev(node);
-        if (head.getNext() == tail) {
+        if (tail == null) {
+            node.setPrev(head);
+            node.setNext(tail);
             head.setNext(node);
+            tail.setPrev(node);
+        } else {
+            node.setPrev(tail.getPrev());
+            node.setNext(tail);
+            tail.getPrev().setNext(node);
+            tail.setPrev(node);
         }
     }
 
