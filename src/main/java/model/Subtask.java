@@ -1,15 +1,7 @@
 package model;
 
-import service.InMemoryTaskManager;
-
 public class Subtask extends Task {
     private final int epicId;
-
-    public void changeSubtaskStatus(Status status) {
-        setStatus(status);
-        InMemoryTaskManager manager = InMemoryTaskManager.getInstance();
-        manager.getEpicTaskById(epicId).changeStatus();
-    }
 
     public Subtask(String title, String description, Status status, int epicId) {
         super(title, description, status);
@@ -32,5 +24,16 @@ public class Subtask extends Task {
     @Override
     public int hashCode() {
         return super.hashCode() * 31 + epicId;
+    }
+
+    @Override
+    public String toString() {
+        return "Subtask{" +
+                "id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", status=" + getStatus() +
+                ", epicId=" + epicId +
+                '}';
     }
 }
