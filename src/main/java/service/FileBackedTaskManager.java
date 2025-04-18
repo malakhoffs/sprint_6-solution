@@ -83,13 +83,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         Subtask subtask = new Subtask(title, description, status, epicId);
                         subtask.setId(id);
                         subtasks.put(id, subtask);
-                        addSubtaskToEpic();
                         break;
                 }
                 if (id >= nextId) {
                     nextId = id + 1;
                 }
             }
+            addSubtaskToEpic();
         } catch (IOException e) {
             throw new ManagerLoadException("Ошибка при загрузке из файла " + e.getMessage());
         }
