@@ -10,12 +10,10 @@ import java.util.List;
 
 import org.junit.*;
 import service.*;
-import service.FileBackedTaskManager;
 
 import static org.junit.Assert.assertEquals;
 
-public class FileBackedTest extends BasePreferences {
-
+public class FileBackedTest {
     @Before
     @Description("Очистка тестового файла перед тестами")
     public void clearFile() {
@@ -35,7 +33,7 @@ public class FileBackedTest extends BasePreferences {
     }
 
     @Test
-    @Description("Проверка на записяваемость в файл")
+    @Description("Проверка на записываемость в файл")
     public void isFileWritable() throws IOException {
 
         String path = new File("src/resources/task_info.csv").getAbsolutePath();
@@ -51,8 +49,7 @@ public class FileBackedTest extends BasePreferences {
         List<String> actual = Files.readAllLines(Paths.get("src/resources/task_info.csv"), Charset.defaultCharset());
         System.out.println(actual);
         List<String> expected = new ArrayList<>();
-        expected.add("id,type,title,description,status,epicId, 1,TASK,Таск1,ТаскДескрипшн1,NEW,, 2,EPIC,Эпик1," +
-                "ЭпикДескрипшн1,NEW,, 3,SUBTASK,Субтаск1,СубтаскДескрипшн1,NEW,2");
+        expected.add("id,type,title,description,status,epicId, 1,TASK,Таск1,ТаскДескрипшн1,NEW,, 2,EPIC,Эпик1," + "ЭпикДескрипшн1,NEW,, 3,SUBTASK,Субтаск1,СубтаскДескрипшн1,NEW,2");
 
         assertEquals(expected.toString(), actual.toString());
     }
@@ -71,9 +68,32 @@ public class FileBackedTest extends BasePreferences {
         Subtask subtask1 = new Subtask("Субтаск1", "СубтаскДескрипшн1", Status.NEW, 2);
         subtask1.setId(3);
 
-        assertEquals(task1, parseFromFile.getTasks().get(0));
-        assertEquals(subtask1, parseFromFile.getSubtasks().get(0));
-        assertEquals(epic1, parseFromFile.getEpics().get(0));
+        List<String> expected = new ArrayList<>();
+        expected.add(task1.toString());
+        expected.add(epic1.toString());
+        expected.add(subtask1.toString());
+
+        assertEquals(expected.get(0), parseFromFile.getTaskById(1).toString());
+        assertEquals(expected.get(1), parseFromFile.getEpicTaskById(2).toString());
+        assertEquals(expected.get(2), parseFromFile.getSubTaskById(3).toString());
     }
 
+    @Test
+    @Description("Проверка на добавление Subtask в Epic просле загрузки из файла")
+    public void isSubtaskAddedToEpic() {
+        File file = new File("src/resources/task_file_load_test.csv");
+        FileBackedTaskManager parseFromFile = FileBackedTaskManager.loadFromFile(file);
+
+
+        Epic epic1 = new Epic("Эпик1", "ЭпикДескрипшн1");
+        epic1.setId(2);
+        Subtask subtask1 = new Subtask("Субтаск1", "СубтаскДескрипшн1", Status.NEW, 2);
+        subtask1.setId(3);
+
+        List<Subtask> expected = new ArrayList<>();
+        expected.add(subtask1);
+
+        List<Subtask> actual = parseFromFile.getEpicTaskById(2).getSubtasks();
+        assertEquals(expected, actual);
+    }
 }

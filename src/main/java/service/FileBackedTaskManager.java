@@ -1,5 +1,7 @@
 package service;
 
+import exceptions.ManagerLoadException;
+import exceptions.ManagerSaveException;
 import model.Epic;
 import model.Status;
 import model.Subtask;
@@ -7,7 +9,7 @@ import model.Task;
 
 import java.io.*;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
@@ -34,7 +36,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 writer.write(taskToCSV(subtask) + "\n");
             }
         } catch (IOException e) {
-            System.err.println("Ошибка сохранения в файл " + e.getMessage());
+            throw new ManagerSaveException("Ошибка сохранения в файл " + e.getMessage());
         }
     }
 
@@ -81,6 +83,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                         Subtask subtask = new Subtask(title, description, status, epicId);
                         subtask.setId(id);
                         subtasks.put(id, subtask);
+                        addSubtaskToEpic();
                         break;
                 }
                 if (id >= nextId) {
@@ -88,7 +91,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 }
             }
         } catch (IOException e) {
-            System.err.println("Ошибка при загрузке из файла: " + e.getMessage());
+            throw new ManagerLoadException("Ошибка при загрузке из файла " + e.getMessage());
+        }
+    }
+
+    private void addSubtaskToEpic() {
+        for (Subtask subtask : subtasks.values()) {
+            epics.get(subtask.getEpicId()).addSubtask(subtask);
         }
     }
 
@@ -145,44 +154,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     public void deleteSubTask(int id) {
         super.deleteSubTask(id);
         save();
-    }
-
-    @Override
-    public void updateTask(Task task) {
-        super.updateTask(task);
-        save();
-    }
-
-    @Override
-    public void updateEpicTask(Epic epic) {
-        super.updateEpicTask(epic);
-        save();
-    }
-
-    @Override
-    public void updateSubTask(Subtask subtask) {
-        super.updateSubTask(subtask);
-        save();
-    }
-
-    @Override
-    public Task getTaskById(int id) {
-        Task task = super.getTaskById(id);
-        save();
-        return task;
-    }
-
-    @Override
-    public Subtask getSubTaskById(int id) {
-        Subtask subtask = super.getSubTaskById(id);
-        save();
-        return subtask;
-    }
-
-    @Override
-    public Epic getEpicTaskById(int id) {
-        Epic epic = super.getEpicTaskById(id);
-        save();
-        return epic;
     }
 }
