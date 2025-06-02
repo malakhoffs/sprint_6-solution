@@ -77,6 +77,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         Task task = new Task(title, description, status, duration, startTime);
                         task.setId(id);
                         tasks.put(id, task);
+                        if (!isTaskOverlap(task)) {
+                            prioritizedTasks.add(task);
+                        }
                         break;
                     case "EPIC":
                         Epic epic = new Epic(title, description);
@@ -90,6 +93,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         Subtask subtask = new Subtask(title, description, status, duration, startTime, epicId);
                         subtask.setId(id);
                         subtasks.put(id, subtask);
+                        if (!isTaskOverlap(subtask)) {
+                            prioritizedTasks.add(subtask);
+                        }
                         break;
                 }
                 if (id >= nextId) {

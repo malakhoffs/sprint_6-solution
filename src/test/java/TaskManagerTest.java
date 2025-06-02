@@ -66,12 +66,12 @@ public class TaskManagerTest extends BasePreferences {
     @Test
     public void inMemoryTaskManagerTest() {
         TaskManager manager = InMemoryTaskManager.getInstance();
-        Task task = new Task("Тайтл", "Описание", Status.NEW, Duration.ofMinutes(10), LocalDateTime.now());
+        Task task = new Task("Тайтл", "Описание", Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         Epic epic = new Epic("Тайтл", "Описание");
         manager.addTask(task);
         manager.addEpic(epic);
         Subtask subtask = new Subtask("Тайтл", "Описание", Status.NEW, Duration.ofMinutes(10),
-                LocalDateTime.now(), 2);
+                LocalDateTime.now().plusMinutes(10), 2);
         manager.addSubTask(subtask);
         assertEquals(task, manager.getTaskById(task.getId()));
         assertEquals(epic, manager.getEpicTaskById(epic.getId()));

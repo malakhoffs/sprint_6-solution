@@ -49,8 +49,8 @@ public class TimeAndDurationTest extends BasePreferences {
     public void isEpicDurationEqualsItsSubtask() {
         LocalDateTime startTime = LocalDateTime.now();
         Epic epic1 = new Epic("Эпик1", "Описание1");
-        Subtask subtask1 = new Subtask("Тайтл2", "Описание2", Status.NEW, Duration.ofMinutes(10), startTime.minusMinutes(20), 1);
-        Subtask subtask2 = new Subtask("Тайтл2", "Описание2", Status.NEW, Duration.ofMinutes(10), startTime.minusMinutes(20), 1);
+        Subtask subtask1 = new Subtask("Тайтл2", "Описание2", Status.NEW, Duration.ofMinutes(10), startTime, 1);
+        Subtask subtask2 = new Subtask("Тайтл2", "Описание2", Status.NEW, Duration.ofMinutes(10), startTime.plusMinutes(20), 1);
         manager.addEpic(epic1);
         manager.addSubTask(subtask1);
         manager.addSubTask(subtask2);

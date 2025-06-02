@@ -49,15 +49,15 @@ public class FileBackedManagerTest {
         fileBackedManager.addEpic(epic1);
         Subtask subtask1 = new Subtask("Субтаск1", "СубтаскДескрипшн1", Status.NEW,
                 Duration.ofMinutes(10),
-                LocalDateTime.of(2025, Month.MAY, 4, 12, 0, 0), 2);
+                LocalDateTime.of(2025, Month.MAY, 5, 12, 0, 0), 2);
         fileBackedManager.addSubTask(subtask1);
 
         List<String> actual = Files.readAllLines(Paths.get("src/resources/task_info.csv"), Charset.defaultCharset());
         System.out.println(actual);
         List<String> expected = new ArrayList<>();
         expected.add("id,type,title,description,status,duration,startTime,epicId, 1,TASK,Таск1,ТаскДескрипшн1,NEW,PT10M," +
-                "2025-05-04T12:00,, 2,EPIC,Эпик1,ЭпикДескрипшн1,NEW,PT10M,2025-05-04T12:00,, 3," +
-                "SUBTASK,Субтаск1,СубтаскДескрипшн1,NEW,PT10M,2025-05-04T12:00,2");
+                "2025-05-04T12:00,, 2,EPIC,Эпик1,ЭпикДескрипшн1,NEW,PT10M,2025-05-05T12:00,, 3," +
+                "SUBTASK,Субтаск1,СубтаскДескрипшн1,NEW,PT10M,2025-05-05T12:00,2");
 
         assertEquals(expected.toString(), actual.toString());
     }
