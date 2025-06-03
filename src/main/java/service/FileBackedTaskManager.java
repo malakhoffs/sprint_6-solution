@@ -77,7 +77,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         Task task = new Task(title, description, status, duration, startTime);
                         task.setId(id);
                         tasks.put(id, task);
-                        if (!isTaskOverlap(task)) {
+                        if (task.getStartTime() != null && !isTaskOverlap(task)) {
                             prioritizedTasks.add(task);
                         }
                         break;
@@ -93,7 +93,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         Subtask subtask = new Subtask(title, description, status, duration, startTime, epicId);
                         subtask.setId(id);
                         subtasks.put(id, subtask);
-                        if (!isTaskOverlap(subtask)) {
+                        if (subtask.getStartTime() != null && !isTaskOverlap(subtask)) {
                             prioritizedTasks.add(subtask);
                         }
                         break;
