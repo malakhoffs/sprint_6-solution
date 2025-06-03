@@ -1,15 +1,20 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
     private final List<Subtask> subtasks;
 
+    private LocalDateTime endTime;
+
     public Epic(String title, String description) {
         super(title, description, Status.NEW);
         subtasks = new ArrayList<>();
     }
+
 
     public void addSubtask(Subtask subtask) {
         subtasks.add(subtask);
@@ -28,6 +33,15 @@ public class Epic extends Task {
 
     public List<Subtask> getSubtasks() {
         return new ArrayList<>(subtasks);
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public void changeStatus() {
@@ -68,5 +82,11 @@ public class Epic extends Task {
     @Override
     public int hashCode() {
         return super.hashCode() * 31 + subtasks.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getId() + ", Epic, " + getTitle() + ", " + getStatus()
+                + ", " + getDescription() + ", " + getDuration().toMinutes() + ", " + getStartTime();
     }
 }

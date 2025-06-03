@@ -8,6 +8,8 @@ import model.Subtask;
 import model.Task;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -25,7 +27,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("id,type,title,description,status,epicId\n");
+            writer.write("id,type,title,description,status,duration,startTime,epicId\n");
             for (Task task : getTasks()) {
                 writer.write(taskToCSV(task) + "\n");
             }
@@ -49,7 +51,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
 
         return String.join(",", String.valueOf(task.getId()), task.getClass().getSimpleName().toUpperCase(),
-                task.getTitle(), task.getDescription(), String.valueOf(task.getStatus()), epicId);
+                task.getTitle(), task.getDescription(), String.valueOf(task.getStatus()),
+                String.valueOf(task.getDuration()), String.valueOf(task.getStartTime()), epicId);
     }
 
     private void parseFile() {
@@ -67,22 +70,32 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 String title = parts[2];
                 String description = parts[3];
                 Status status = Status.valueOf(parts[4]);
+                Duration duration = Duration.parse(parts[5]);
+                LocalDateTime startTime = LocalDateTime.parse(parts[6]);
                 switch (type) {
                     case "TASK":
-                        Task task = new Task(title, description, status);
+                        Task task = new Task(title, description, status, duration, startTime);
                         task.setId(id);
                         tasks.put(id, task);
+                        if (task.getStartTime() != null && !isTaskOverlap(task)) {
+                            prioritizedTasks.add(task);
+                        }
                         break;
                     case "EPIC":
                         Epic epic = new Epic(title, description);
                         epic.setId(id);
+                        epic.setDuration(duration);
+                        epic.setStartTime(startTime);
                         epics.put(id, epic);
                         break;
                     case "SUBTASK":
-                        int epicId = Integer.parseInt(parts[5]);
-                        Subtask subtask = new Subtask(title, description, status, epicId);
+                        int epicId = Integer.parseInt(parts[7]);
+                        Subtask subtask = new Subtask(title, description, status, duration, startTime, epicId);
                         subtask.setId(id);
                         subtasks.put(id, subtask);
+                        if (subtask.getStartTime() != null && !isTaskOverlap(subtask)) {
+                            prioritizedTasks.add(subtask);
+                        }
                         break;
                 }
                 if (id >= nextId) {

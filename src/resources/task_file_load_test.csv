@@ -1,4 +1,4 @@
-id,type,title,description,status,epicId
-1,TASK,Таск1,ТаскДескрипшн1,NEW,
-2,EPIC,Эпик1,ЭпикДескрипшн1,NEW,
-3,SUBTASK,Субтаск1,СубтаскДескрипшн1,NEW,2
+id,type,title,description,status,duration,startTime,epicId
+1,TASK,Таск1,ТаскДескрипшн1,NEW,PT10M,2025-05-04T12:00,
+2,EPIC,Эпик1,ЭпикДескрипшн1,NEW,PT10M,2025-05-04T12:00,
+3,SUBTASK,Субтаск1,СубтаскДескрипшн1,NEW,PT10M,2025-05-04T12:00,2
