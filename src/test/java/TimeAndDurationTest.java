@@ -54,7 +54,6 @@ public class TimeAndDurationTest extends BasePreferences {
         manager.addEpic(epic1);
         manager.addSubTask(subtask1);
         manager.addSubTask(subtask2);
-        System.out.println(manager.getEpicTaskById(1));
         assertEquals(Duration.ofMinutes(20), manager.getEpicTaskById(1).getDuration());
     }
 
@@ -68,7 +67,6 @@ public class TimeAndDurationTest extends BasePreferences {
         manager.addEpic(epic1);
         manager.addSubTask(subtask1);
         manager.addSubTask(subtask2);
-        System.out.println(manager.getEpicTaskById(1).getEndTime());
         assertEquals(startTime.plusMinutes(90), manager.getEpicTaskById(1).getEndTime());
     }
 }
