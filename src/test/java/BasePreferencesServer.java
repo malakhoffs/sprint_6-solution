@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class BasePreferencesServer {
     InMemoryTaskManager manager = InMemoryTaskManager.getInstance();
-    LocalHostServer server = new LocalHostServer();
+    LocalHostServer server = new LocalHostServer(manager);
 
     @Before
     public void startServer() throws IOException {

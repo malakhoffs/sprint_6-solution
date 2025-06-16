@@ -36,6 +36,7 @@ public class TaskHandler extends BaseHandler implements HttpHandler {
                     }
                 }
                 case "POST" -> handlePostTask(exchange);
+                case "PUT" -> handlePutTask(exchange);
                 case "DELETE" -> {
                     if (pathParts.length == 3) {
                         handleDeleteTaskById(exchange, pathParts[2]);
@@ -81,7 +82,24 @@ public class TaskHandler extends BaseHandler implements HttpHandler {
             InputStreamReader inputReader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
             Task task = gson.fromJson(inputReader, Task.class);
             taskManager.addTask(task);
-            sendText(exchange, "Задача добавлена", 201);
+            sendText(exchange, "Задача добавлена, присвоен Id: " + task.getId(), 201);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            sendHasInteractions(exchange);
+        }
+    }
+
+    private void handlePutTask(HttpExchange exchange) {
+        try {
+            InputStreamReader inputReader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+            Task task = gson.fromJson(inputReader, Task.class);
+            int requestId = task.getId();
+            int currentId = taskManager.getTaskById(task.getId()).getId();
+            taskManager.getTasks();
+            if (requestId == currentId) {
+                taskManager.updateTask(task);
+            }
+            sendText(exchange, "Задача обновлена", 201);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             sendHasInteractions(exchange);

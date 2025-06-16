@@ -40,6 +40,7 @@ public class EpicHandler extends BaseHandler implements HttpHandler {
                     }
                 }
                 case "POST" -> handlePostEpic(exchange);
+                case "PUT" -> handlePutEpic(exchange);
                 case "DELETE" -> {
                     if (pathParts.length == 3) {
                         handleDeleteEpicById(exchange, pathParts[2]);
@@ -103,7 +104,24 @@ public class EpicHandler extends BaseHandler implements HttpHandler {
                     StandardCharsets.UTF_8);
             Epic epicTask = gson.fromJson(inputReader, Epic.class);
             taskManager.addEpic(epicTask);
-            sendText(exchange, "Задача добавлена", 201);
+            sendText(exchange, "Задача добавлена, присвоен Id: " + epicTask.getId(), 201);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            sendHasInteractions(exchange);
+        }
+    }
+
+    private void handlePutEpic(HttpExchange exchange) {
+        try {
+            InputStreamReader inputReader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+            Epic epicTask = gson.fromJson(inputReader, Epic.class);
+            int requestId = epicTask.getId();
+            int currentId = taskManager.getEpicTaskById(epicTask.getId()).getId();
+            taskManager.getEpics();
+            if (requestId == currentId) {
+                taskManager.updateEpicTask(epicTask);
+            }
+            sendText(exchange, "Задача обновлена", 201);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             sendHasInteractions(exchange);

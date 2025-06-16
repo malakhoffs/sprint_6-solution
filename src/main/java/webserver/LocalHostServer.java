@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import handler.*;
-import service.InMemoryTaskManager;
 import adapter.DurationAdapter;
 import adapter.LocalDateTimeAdapter;
+import service.TaskManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,7 +17,7 @@ import static webserver.PathConstants.*;
 
 public class LocalHostServer {
 
-    private final InMemoryTaskManager manager;
+    private final TaskManager manager;
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
@@ -25,10 +25,10 @@ public class LocalHostServer {
 
     private final HttpServer httpServer;
 
-    public LocalHostServer() {
+    public LocalHostServer(TaskManager manager) {
+        this.manager = manager;
         try {
             httpServer = HttpServer.create();
-            manager = InMemoryTaskManager.getInstance();
         } catch (IOException e) {
             throw new RuntimeException("Ошибка сервера: " + e.getMessage(), e);
         }

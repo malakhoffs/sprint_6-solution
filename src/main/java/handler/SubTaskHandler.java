@@ -36,6 +36,7 @@ public class SubTaskHandler extends BaseHandler implements HttpHandler {
                     }
                 }
                 case "POST" -> handlePostSubtask(exchange);
+                case "PUT" -> handlePutSubtask(exchange);
                 case "DELETE" -> {
                     if (pathParts.length == 3) {
                         handleDeleteSubtaskById(exchange, pathParts[2]);
@@ -81,7 +82,24 @@ public class SubTaskHandler extends BaseHandler implements HttpHandler {
             InputStreamReader inputReader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
             Subtask subtask = gson.fromJson(inputReader, Subtask.class);
             taskManager.addSubTask(subtask);
-            sendText(exchange, "Задача добавлена", 201);
+            sendText(exchange, "Задача добавлена, присвоен Id: " + subtask.getId(), 201);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            sendHasInteractions(exchange);
+        }
+    }
+
+    private void handlePutSubtask(HttpExchange exchange) {
+        try {
+            InputStreamReader inputReader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+            Subtask subTask = gson.fromJson(inputReader, Subtask.class);
+            int requestId = subTask.getId();
+            int currentId = taskManager.getSubTaskById(subTask.getId()).getId();
+            taskManager.getSubtasks();
+            if (requestId == currentId){
+                taskManager.updateSubTask(subTask);
+            }
+            sendText(exchange, "Задача обновлена", 201);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             sendHasInteractions(exchange);
